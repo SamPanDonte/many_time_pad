@@ -1,7 +1,7 @@
 #![warn(clippy::all, rust_2018_idioms)]
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use many_time_pad::ui::TemplateApp;
+use many_time_pad::ui::Application;
 
 #[cfg(not(target_arch = "wasm32"))]
 fn main() -> eframe::Result<()> {
@@ -14,7 +14,7 @@ fn main() -> eframe::Result<()> {
     eframe::run_native(
         "Many Time Pad",
         native_options,
-        Box::new(|_| Box::<TemplateApp>::default()),
+        Box::new(|_| Box::<Application>::default()),
     )
 }
 
@@ -27,7 +27,7 @@ fn main() {
             .start(
                 "the_canvas_id",
                 eframe::WebOptions::default(),
-                Box::new(|_| Box::<TemplateApp>::default()),
+                Box::new(|_| Box::<Application>::default()),
             )
             .await
             .expect("failed to start application");

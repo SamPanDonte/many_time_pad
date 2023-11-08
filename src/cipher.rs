@@ -28,3 +28,9 @@ impl Cipher {
         self.encrypt(input)
     }
 }
+
+impl Default for Cipher {
+    fn default() -> Self {
+        Self::new(vec![0])
+    }
+}

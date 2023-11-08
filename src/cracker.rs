@@ -1,4 +1,5 @@
 use egui::ahash::{HashMap, HashMapExt, HashSet, HashSetExt};
+use std::num::NonZeroUsize;
 
 /// A cracker for a many time pad.
 pub struct Cracker {
@@ -27,7 +28,8 @@ impl Cracker {
 
     /// Crack the given contents with the given key length.
     /// Returns none if the key length is wrong or alphabet is wrong.
-    pub fn crack(&self, contents: &[u8], key_length: usize) -> Option<Vec<HashSet<u8>>> {
+    pub fn crack(&self, contents: &[u8], key_length: NonZeroUsize) -> Option<Vec<HashSet<u8>>> {
+        let key_length = key_length.get();
         let mut remaining_bytes = key_length;
         let mut key: Vec<HashSet<u8>> = {
             let bytes = (0..=255u8).collect();

@@ -4,9 +4,12 @@ use egui::ahash::HashSet;
 use encoding::all::WINDOWS_1250;
 use encoding::{EncoderTrap, Encoding};
 
-pub mod cipher;
-pub mod cracker;
+mod cipher;
+mod cracker;
 pub mod ui;
+
+pub use cipher::*;
+pub use cracker::*;
 
 /// The alphabet used in the challenge. It's Polish letters, numbers, and some punctuation.
 const ALPHABET: &str = "aąbcćdeęfghijklłmnńoópqrsśtuvwxyzźżAĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ \r\n\t\u{a0}—";
