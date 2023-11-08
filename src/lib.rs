@@ -4,9 +4,9 @@ use egui::ahash::HashSet;
 use encoding::all::WINDOWS_1250;
 use encoding::{EncoderTrap, Encoding};
 
-pub mod ui;
 pub mod cipher;
 pub mod cracker;
+pub mod ui;
 
 /// The alphabet used in the challenge. It's Polish letters, numbers, and some punctuation.
 const ALPHABET: &str = "aąbcćdeęfghijklłmnńoópqrsśtuvwxyzźżAĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ \r\n\t\u{a0}—";
@@ -20,5 +20,9 @@ pub fn utf8_alphabet() -> HashSet<u8> {
 
 /// Returns a set of bytes that are valid in Windows-1250.
 pub fn windows1250_alphabet() -> HashSet<u8> {
-    WINDOWS_1250.encode(ALPHABET, EncoderTrap::Strict).unwrap().into_iter().collect()
+    WINDOWS_1250
+        .encode(ALPHABET, EncoderTrap::Strict)
+        .unwrap()
+        .into_iter()
+        .collect()
 }

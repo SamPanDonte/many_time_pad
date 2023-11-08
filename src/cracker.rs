@@ -12,8 +12,14 @@ impl Cracker {
         for first in alphabet {
             for second in alphabet {
                 let value = *first ^ *second;
-                combinations.entry(value).or_insert_with(HashSet::new).insert(*first);
-                combinations.entry(value).or_insert_with(HashSet::new).insert(*second);
+                combinations
+                    .entry(value)
+                    .or_insert_with(HashSet::new)
+                    .insert(*first);
+                combinations
+                    .entry(value)
+                    .or_insert_with(HashSet::new)
+                    .insert(*second);
             }
         }
         Self { combinations }
@@ -38,9 +44,15 @@ impl Cracker {
                 }
 
                 let value = *byte ^ chunk[position];
-                let possibilities = self.combinations[&value].iter().map(|value| chunk[position] ^ *value).collect();
+                let possibilities = self.combinations[&value]
+                    .iter()
+                    .map(|value| chunk[position] ^ *value)
+                    .collect();
 
-                key[position] = key[position].intersection(&possibilities).copied().collect();
+                key[position] = key[position]
+                    .intersection(&possibilities)
+                    .copied()
+                    .collect();
                 if key[position].len() == 1 {
                     remaining_bytes -= 1;
                 } else if key[position].is_empty() {
