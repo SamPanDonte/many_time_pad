@@ -1,6 +1,6 @@
 {
-  "name": "egui Template PWA",
-  "short_name": "egui-template-pwa",
+  "name": "Many Time Pad PWA",
+  "short_name": "many-time-pad-pwa",
   "icons": [
     {
       "src": "./icon-256.png",
