@@ -46,7 +46,7 @@ impl Cracker {
 
         for word in &self.words {
             for index in 0..(contents.len() - word.len()) {
-                let mut possible = false;
+                let mut possible = true;
 
                 for (i, byte) in word.iter().zip(&contents[index..]).enumerate() {
                     if !potential_key.is_possible((index + i) % key_length, *byte.0 ^ *byte.1) {
