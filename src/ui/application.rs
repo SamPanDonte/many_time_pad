@@ -4,12 +4,13 @@ use super::TextEncoding;
 use crate::{Cipher, Cracker};
 use eframe::{App, Frame};
 use egui::scroll_area::ScrollArea;
-use egui::{Align, CentralPanel, Context, DroppedFile, Layout, Ui, Window};
+use egui::text::LayoutJob;
+use egui::{Align, CentralPanel, Color32, Context, DroppedFile, Layout, Ui, Window};
 use std::num::NonZeroUsize;
 
 pub struct Application {
     file: Option<DroppedFile>,
-    message: Option<String>,
+    message: Option<LayoutJob>,
     key: Option<PotentialKey>,
     encoding: TextEncoding,
     key_length: NonZeroUsizeInput,
@@ -83,8 +84,8 @@ impl Application {
         ui.separator();
 
         ScrollArea::new([false, true]).show(ui, |ui| {
-            if let Some(text) = &self.message {
-                ui.label(text);
+            if let Some(message) = &self.message {
+                ui.label(message.clone());
             }
         });
     }
@@ -96,11 +97,28 @@ impl Application {
             .and_then(|file| file.bytes.as_ref())
             .map(|bytes| self.cipher.decrypt(bytes))
             .and_then(|bytes| self.encoding.decode(&bytes));
+        let mut job = LayoutJob::default();
+
         if let Some(text) = text_option {
-            self.message = Some(text);
+            if let Some(key) = &mut self.key {
+                for (index, character) in text.chars().enumerate() {
+                    let index = index % self.key_length.get();
+
+                    let mut text_format = egui::TextFormat::default();
+
+                    if key.is_decoded(index) {
+                        text_format.background = Color32::DARK_GREEN;
+                    }
+
+                    job.append(&character.to_string(), 0.0, text_format);
+                }
+            } else {
+                job.text = text;
+            }
         } else {
-            self.message = Some("Non decodable text".to_owned());
+            job.text = "Non decodable text".to_owned();
         }
+        self.message = Some(job);
     }
 }
 

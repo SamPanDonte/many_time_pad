@@ -21,4 +21,9 @@ impl PotentialKey {
         }
         key
     }
+
+    /// Is this key position only one possible option
+    pub fn is_decoded(&self, index: usize) -> bool {
+        self.key[index].len() == 1
+    }
 }
