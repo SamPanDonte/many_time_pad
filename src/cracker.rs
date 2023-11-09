@@ -36,8 +36,8 @@ impl Cracker {
 
     /// Crack the given contents with the given key length.
     /// Returns none if the key length is wrong or alphabet is wrong.
-    pub fn crack(&self, contents: &[u8], key_length: NonZeroUsize) -> Option<PotentialKey> {
-        let potential_key = self.xor_attack(contents, key_length)?;
+    pub fn crack(&self, contents: &[u8], key_length: NonZeroUsize) -> PotentialKey {
+        let potential_key = self.xor_attack(contents, key_length);
         let potential_key: Vec<Vec<u8>> = potential_key
             .into_iter()
             .map(|key| key.into_iter().collect())
@@ -65,10 +65,10 @@ impl Cracker {
             }
         }
 
-        Some(potential_key)
+        potential_key
     }
 
-    fn xor_attack(&self, contents: &[u8], key_length: NonZeroUsize) -> Option<Vec<HashSet<u8>>> {
+    fn xor_attack(&self, contents: &[u8], key_length: NonZeroUsize) -> Vec<HashSet<u8>> {
         let key_length = key_length.get();
         let mut remaining_bytes = key_length;
         let mut key: Vec<HashSet<u8>> = {
@@ -81,7 +81,7 @@ impl Cracker {
             for (index, byte) in chunk.iter().enumerate() {
                 let position = index % key_length;
 
-                if key[position].len() == 1 {
+                if key[position].len() <= 1 {
                     continue;
                 }
 
@@ -95,17 +95,15 @@ impl Cracker {
                     .intersection(&possibilities)
                     .copied()
                     .collect();
-                if key[position].len() == 1 {
+                if key[position].len() <= 1 {
                     remaining_bytes -= 1;
-                } else if key[position].is_empty() {
-                    return None;
                 }
 
                 if remaining_bytes == 0 {
-                    return Some(key);
+                    return key;
                 }
             }
         }
-        Some(key)
+        key
     }
 }

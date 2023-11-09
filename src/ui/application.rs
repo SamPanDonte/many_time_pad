@@ -57,7 +57,7 @@ impl Application {
                 .file
                 .as_ref()
                 .and_then(|file| file.bytes.as_ref())
-                .and_then(|bytes| self.cracker.crack(bytes, *self.key_length));
+                .map(|bytes| self.cracker.crack(bytes, *self.key_length));
             if let Some(key) = key_option {
                 self.cipher = Cipher::new(key.get_current_key());
                 self.key = Some(key);
@@ -106,6 +106,8 @@ impl Application {
                         text_format.background = Color32::DARK_GREEN;
                     } else if !key.is_uncertain(index) {
                         text_format.background = Color32::DARK_BLUE;
+                    } else if key.is_error(index) {
+                        text_format.background = Color32::DARK_RED;
                     }
 
                     job.append(&character.to_string(), 0.0, text_format);

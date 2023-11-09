@@ -19,7 +19,7 @@ impl PotentialKey {
     pub fn get_current_key(&self) -> Vec<u8> {
         let mut key = Vec::with_capacity(self.key.len());
         for (index, value) in self.key.iter().enumerate() {
-            key.push(value[self.positions[index]]);
+            key.push(*value.get(self.positions[index]).unwrap_or(&0));
         }
         key
     }
@@ -43,5 +43,10 @@ impl PotentialKey {
     /// Is value possible for this key position
     pub fn is_possible(&self, index: usize, value: u8) -> bool {
         self.key[index].contains(&value)
+    }
+
+    /// Is value not possible to decode
+    pub fn is_error(&self, index: usize) -> bool {
+        self.key[index].is_empty()
     }
 }
