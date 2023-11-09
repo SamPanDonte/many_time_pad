@@ -1,11 +1,12 @@
 use super::NonZeroUsizeInput;
-use super::PotentialKey;
-use super::TextEncoding;
-use crate::{Cipher, Cracker};
+use crate::{Cipher, Cracker, PotentialKey, TextEncoding};
 use eframe::{App, Frame};
 use egui::scroll_area::ScrollArea;
 use egui::text::LayoutJob;
-use egui::{Align, CentralPanel, Color32, Context, DroppedFile, Layout, Ui, Window};
+use egui::{
+    Align, CentralPanel, Color32, Context, DroppedFile, Hyperlink, Layout, TopBottomPanel, Ui,
+    Window,
+};
 use std::num::NonZeroUsize;
 
 pub struct Application {
@@ -47,7 +48,7 @@ impl Application {
                         )
                         .changed();
                     if changed {
-                        self.cracker = Cracker::new(&self.encoding.alphabet());
+                        self.cracker = Cracker::new(&self.encoding);
                     }
                 });
         });
@@ -58,11 +59,6 @@ impl Application {
                 .and_then(|file| file.bytes.as_ref())
                 .and_then(|bytes| self.cracker.crack(bytes, *self.key_length));
             if let Some(key) = key_option {
-                let key = key
-                    .into_iter()
-                    .map(|key| key.into_iter().collect())
-                    .collect();
-                let key = PotentialKey::new(key);
                 self.cipher = Cipher::new(key.get_current_key());
                 self.key = Some(key);
             }
@@ -108,6 +104,8 @@ impl Application {
 
                     if key.is_decoded(index) {
                         text_format.background = Color32::DARK_GREEN;
+                    } else if !key.is_uncertain(index) {
+                        text_format.background = Color32::DARK_BLUE;
                     }
 
                     job.append(&character.to_string(), 0.0, text_format);
@@ -129,7 +127,7 @@ impl Default for Application {
             file: None,
             message: None,
             key: None,
-            cracker: Cracker::new(&encoding.alphabet()),
+            cracker: Cracker::new(&encoding),
             encoding,
             key_length: NonZeroUsize::new(256).unwrap().into(),
             cipher: Cipher::default(),
@@ -140,6 +138,14 @@ impl Default for Application {
 impl App for Application {
     fn update(&mut self, ctx: &Context, _frame: &mut Frame) {
         Window::new("Controls").show(ctx, |ui| self.create_controls(ui));
+        TopBottomPanel::bottom("bottom_panel").show(ctx, |ui| {
+            ui.with_layout(Layout::bottom_up(Align::Center), |ui| {
+                ui.add(Hyperlink::from_label_and_url(
+                    "Source code",
+                    "https://github.com/SamPanDonte/many_time_pad/tree/master/",
+                ));
+            });
+        });
         CentralPanel::default().show(ctx, |ui| self.create_content(ui));
 
         ctx.input(|input| {

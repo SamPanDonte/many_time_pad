@@ -26,6 +26,14 @@ impl TextEncoding {
             TextEncoding::UTF8 => crate::utf8_alphabet(),
         }
     }
+
+    /// Get most popular words.
+    pub fn words(&self) -> Vec<Vec<u8>> {
+        match self {
+            TextEncoding::WINDOWS1250 => crate::windows1250_words(),
+            TextEncoding::UTF8 => crate::utf8_words(),
+        }
+    }
 }
 
 impl Default for TextEncoding {
