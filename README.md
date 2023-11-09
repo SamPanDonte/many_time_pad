@@ -6,16 +6,6 @@ This attack assumes that the message was encoded using the same key multiple tim
 it will try to find the key and decode the message. After that, user can correct errors and as a result gain the
 original message.
 
-## Getting started
-
-Start by clicking "Use this template" at https://github.com/emilk/eframe_template/ or
-follow [these instructions](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template).
-
-Change the name of the crate: Chose a good name for your project, and change the name to it in:
-
-* `main.rs`
-    * Change `eframe_template::TemplateApp` to `your_crate::TemplateApp`
-
 ## Running native locally
 
 Make sure you are using the latest version of stable rust by running `rustup update`.
@@ -29,6 +19,12 @@ On Linux you need to first run:
 On Fedora Rawhide you need to run:
 
 `dnf install clang clang-devel clang-tools-extra libxkbcommon-devel pkg-config openssl-devel libxcb-devel gtk3-devel atk fontconfig-devel`
+
+When run with any argument, it will work in CLI mode. Otherwise, it will open a GUI.
+
+CLI mode example:
+
+`cargo run --release -- -i ciphertext.xor -o plaintext.txt -e windows1250 -k key.bin`
 
 ## Running web locally
 

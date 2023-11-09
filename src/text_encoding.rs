@@ -3,8 +3,19 @@ use encoding::all::WINDOWS_1250;
 use encoding::{DecoderTrap, Encoding};
 use std::str;
 
+#[cfg(not(target_arch = "wasm32"))]
+use clap::ValueEnum;
+
 /// Text encoding.
-#[derive(PartialEq)]
+#[cfg(not(target_arch = "wasm32"))]
+#[derive(PartialEq, ValueEnum, Clone, Debug)]
+pub enum TextEncoding {
+    WINDOWS1250,
+    UTF8,
+}
+
+#[cfg(target_arch = "wasm32")]
+#[derive(PartialEq, Clone, Debug)]
 pub enum TextEncoding {
     WINDOWS1250,
     UTF8,
