@@ -24,29 +24,42 @@ impl PotentialKey {
         key
     }
 
-    /// Is this key position only one possible option
+    /// Is this key position only one possible option.
     pub fn is_decoded(&self, index: usize) -> bool {
         self.key[index].len() == 1
     }
 
-    /// Is value uncertain
+    /// Is value uncertain.
     pub fn is_uncertain(&self, index: usize) -> bool {
         self.uncertain[index]
     }
 
-    /// Set value for this key position
+    /// Set value for this key position.
     pub fn set_value(&mut self, index: usize, value: u8) {
         self.uncertain[index] = false;
         self.positions[index] = self.key[index].iter().position(|&r| r == value).unwrap();
     }
 
-    /// Is value possible for this key position
+    /// Is value possible for this key position.
     pub fn is_possible(&self, index: usize, value: u8) -> bool {
         self.key[index].contains(&value)
     }
 
-    /// Is value not possible to decode
+    /// Is value not possible to decode.
     pub fn is_error(&self, index: usize) -> bool {
         self.key[index].is_empty()
+    }
+
+    /// Get all possible values for this key position.
+    pub fn get_possibilities(&self, index: usize) -> &Vec<u8> {
+        &self.key[index]
+    }
+
+    /// Sets value for key index.
+    pub fn accept_value(&mut self, index: usize) {
+        let value = self.key[index][self.positions[index]];
+        self.key[index].clear();
+        self.key[index].push(value);
+        self.positions[index] = 0;
     }
 }

@@ -16,7 +16,7 @@ pub use potential_key::*;
 pub use text_encoding::*;
 
 /// The alphabet used in the challenge. It's Polish letters, numbers, and some punctuation.
-const ALPHABET: &str = "aąbcćdeęfghijklłmnńoópqrsśtuvwxyzźżAĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ \r\n\t\u{a0}—…";
+const ALPHABET: &str = "aąbcćdeęfghijklłmnńoópqrsśtuvwxyzźżAĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ0123456789!\"#%&()*,-.:;?@[] \r\n\u{a0}—’";
 
 pub const WORDS: &str = include_str!("words.txt");
 
